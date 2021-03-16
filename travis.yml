@@ -1,0 +1,23 @@
+sudo: required
+services:
+  - dockerfile
+
+before_install:
+  - docker build -t seayeo/react-test -f ./client/Dockerfile.dev ./client
+
+script:
+  - docker run -e CI=true seayeo/react-test npm test
+
+after_success:
+  - docker build -t seayeo/multi-client ./client
+  - docker build -t seayeo/multi-server ./server
+  - docker build -t seayeo/multi-worker ./worker
+  - docker build -t seayeo/multi-nginx ./nginx
+  # login to docker cli
+  - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
+  # push changes to dockerhub
+  - docker push seayeo/multi-client
+  - docker push seayeo/multi-server
+  - docker push seayeo/multi-worker
+  - docker push seayeo/mulit-nginx
+  
