@@ -16,8 +16,8 @@ after_success:
   # login to docker cli
   - echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_ID" --password-stdin 
   # push changes to dockerhub
+  # 
   - docker push seayeo/multi-client
   - docker push seayeo/multi-server
   - docker push seayeo/multi-worker
   - docker push seayeo/mulit-nginx
-  
